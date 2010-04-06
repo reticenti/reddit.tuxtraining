@@ -1,0 +1,109 @@
+Now that you know how to look at text, let see the basic things that you can do
+with the text. We will be talking about redirection in this tutorial.
+Redirection is very important in the command line process. It allows you to take
+output from one program and feed it to another program. Let's jump right into it
+so that you can really see what's going on. 
+
+The first redirection I want to talk about is `>`. This command is a symbol
+meaning "Put the output from the left into the file on the right". You can use it
+like so:
+
+    $ date > mydate
+
+This will create a file called `mydate` and put the output of the `date` command
+into it. Check to see that command put into "mydate"
+
+    $ cat mydate
+
+You should see the date and time that was put in. You can `cat` the file again,
+and you'll notice that the time doesnt change, that's because mydate is just a
+text file that has some text in it. If you were to do `date` by itself, the
+output will change because time is moving forward. Let's see what happens when
+we try to redirect the output again. Do
+
+    $ date > mydate
+
+once again, and then 
+
+    $ cat mydate
+
+You'll notice that the file has been updated and that the original date has been
+deleted. This is because the `>` command replaces everything in the file with
+the output. But, you say "Maybe I want a time stamp in the file and I don't `>`
+to clobber the entire file every time I want a time stamp. Ok, let me introduce
+you to `>>`. This is the append redirection. Let's try it out.
+
+    $ date >> mydate
+
+    $ cat mydate
+
+Now you'll see that the new date is at the bottom of the file. Kind of neat, eh?
+You can append the date a few more times to convince yourself that it doesn't
+clobber the file. 
+
+The next redirection symbol is very important for using the command line. It is
+the pipe, or `|`. It's the symbol that is the same key as `\` but hold shift
+instead. It's probably above the right enter key on your keyboard. This one is a
+little more tricky to understand. To understand it, I have to tell you about
+text streams. In the linux command line (or any command line really) you have 3
+streams of data. You can think of these like a real stream/river. In a file
+stream, you have data that needs to "be". You can have output data, input data,
+and error data. Output data is just text that runs across your terminal. When
+you cat a file, the contents go to the output stream, or more frequently called,
+standard output which can be shortened to stdout. When you cat a file, the
+program `cat` sends the data from "mydate" to stdout and then the terminal
+program has to interpret the data in some fashion, which it does by displaying
+it as text. The other main stream is the input stream. This is also more
+frequently called standard input or shortened to stdin. Stdin is the stream that
+takes in information from something to the program. The other stream, which I
+won't go into a lot of detail, but is still important is stderr, or standard
+error. It's the output stream that displays error messages.
+
+Alright, now that I've whetted your appetite taking about streams, let me talk
+about pipes again. the `|` command is the command that takes stdout from one
+program and feeds it to another programs stdin. This is fundementally different
+than the `>` and `>>` which redirect the stdout to become a file's data. To
+illustrate the power of the pipe, lets see something that it is commonly used
+for. There's a command called `dmesg` that allows you to see some messages about
+your hardware in your computer. to run it, just do a simple
+
+    $ dmesg
+
+Wow! That's a lot of information! I sure wish there was a way to view it in a
+reasonable fashion. Well, today is your lucky day. Remember pagers from the last
+tutorial? Well, wouldnt' it be nice to see the dmesg info in one of those
+programs instead of having it race across the screen? Well, let's try it.
+
+    $ less dmesg
+    dmesg: No such file or directory
+
+It errors because there's no file called dmesg. `dmesg` is a program. So, to use
+less with dmesg, we have to take the stdout from dmesg and feed it into less'
+stdin. Here's how to do that:
+
+    $ dmesg | less
+
+Now what a difference! You can now use the `less` pager to scroll around the
+dmesg command. In the last tutorial, I said that `cat` wasn't a pager because it
+doesn't really do anything other than spit text across the screen. While you can
+do `$ dmesg | cat` it does the same exact thing as `dmesg` except it'll be
+slower because it also has to call the cat command. 
+
+Now, if you're putting things together, you may want to send cat to less like
+so:
+
+    $ cat reallylongfile | less
+
+But please, for the love of the FSM **don't do this**. It works just like you'd
+expect it to, but it's a really bad habit that many people have. If you want to
+use less to view a file, just use `less` directly.
+
+    $ less reallylongfile
+
+That's the correct way to do it.
+
+Alright, that's it for now. There are other redirections, but they're not used
+much. 
+
+If you have any questions, comments, or suggestions leave me a comment, pm me,
+or come to irc.freenode.net #reddit-tuxtraining and find me as Reticenti.
